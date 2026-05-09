@@ -1,0 +1,6 @@
+@CamuLibraryNowAPI_HostAddress = http://localhost:5181
+
+GET {{CamuLibraryNowAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
