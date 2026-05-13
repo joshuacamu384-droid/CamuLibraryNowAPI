@@ -24,3 +24,5 @@ app.MapGet("/", () => "CamuLibraryNowAPI is running 🚀");
 
 // Controllers
 app.MapControllers();
+
+app.Run();
