@@ -1,4 +1,4 @@
-FROM mrc.microsoft.com/dotnet/aspenet:8.0 AS base
+FROM mrc.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=https://+:8080
