@@ -16,27 +16,27 @@ namespace CamuLibraryNowAPI.Controllers
              new Book { Id = 2, Title = "The Adventures of Huckleberry Finn", Author = "Mark Twain", Genre = "Adventure", Available = true, PublishedYear = 1885 }
         };
         [HttpGet]
-        public IActionResult getAll()
+        public IActionResult GetAll()
         {
-            return Ok(new { status = "succes", data = books, message = "Books Retrieve" });
+            return Ok(new { status = "success", data = books, message = "Books retrieve" });
         }
         [HttpGet("{id}")]
-        public IActionResult getById(int id)
+        public IActionResult GetById(int id)
         {
             var book = books.FirstOrDefault(b => b.Id == id);
             if (book == null)
                 return NotFound(new { status = "error", data = (object?)null, message = "Books not found" });
-            return Ok(new { status = "succes", data = book, message = "Book retrieved" });
+            return Ok(new { status = "success", data = book, message = "Book retrieved" });
         }
-        [HttpPost]
+        [HttpPost("{id}")]
         public IActionResult Create([FromBody] Book newbook)
         {
             newbook.Id = books.Count + 1;
             books.Add(newbook);
-            return CreatedAtAction(nameof(getById), new { id = newbook.Id },
-                new { status = "succes", data = newbook, message = "Book Created" });
+            return CreatedAtAction(nameof(GetById), new { id = newbook.Id },
+                new { status = "success", data = books, message = "Book retrieved" });
         }
-        [HttpPut("{id}")]
+        [HttpPut]
         public IActionResult Update(int id, [FromBody] Book updateBook)
         {
             var book = books.FirstOrDefault(b => b.Id == id);
@@ -49,7 +49,7 @@ namespace CamuLibraryNowAPI.Controllers
             book.Available = updateBook.Available;
             book.PublishedYear = updateBook.PublishedYear;
 
-            return Ok(new { status = "success", data = book, messsage = "Book Update" });
+            return Ok(new { status = "success", data = books, messsage = "Book Update" });
         }
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
@@ -59,7 +59,7 @@ namespace CamuLibraryNowAPI.Controllers
                 return NotFound(new { status = "error", data = (Object?)null, message = "Book not found" });
 
             books.Remove(book);
-            return Ok(new { status = "success", data = (object?)null, message = "Books Deleted" });
+            return Ok(new { status = "success", data = (object?)null, message = "Books retrieved" });
         }
     }
 }
