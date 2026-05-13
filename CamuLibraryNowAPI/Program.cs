@@ -6,17 +6,16 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure ports for both Local Development and Render Production
 var renderPort = Environment.GetEnvironmentVariable("PORT");
 
 if (!string.IsNullOrEmpty(renderPort))
 {
-    // Render production environment
+    // Production environment on Render
     app.Urls.Add($"0.0.0:{renderPort}");
 }
 else
 {
-    // Local development environment (supports both HTTP and HTTPS testing)
+    // Local development environment
     app.Urls.Add("http://localhost:5100");
     app.Urls.Add("https://localhost:5101");
 }
@@ -24,7 +23,6 @@ else
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Only redirect to HTTPS locally; Render handles this automatically in production
 if (string.IsNullOrEmpty(renderPort))
 {
     app.UseHttpsRedirection();
@@ -34,4 +32,3 @@ app.MapGet("/", () => "CamuLibraryNowAPI is running 🚀");
 app.MapControllers();
 
 app.Run();
-
