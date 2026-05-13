@@ -1,28 +1,37 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
-// Swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Render port setup
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Urls.Add($"http://0.0.0.0:{port}");
+// Configure ports for both Local Development and Render Production
+var renderPort = Environment.GetEnvironmentVariable("PORT");
 
-// ALWAYS enable Swagger (not only dev)
+if (!string.IsNullOrEmpty(renderPort))
+{
+    // Render production environment
+    app.Urls.Add($"0.0.0:{renderPort}");
+}
+else
+{
+    // Local development environment (supports both HTTP and HTTPS testing)
+    app.Urls.Add("http://localhost:5100");
+    app.Urls.Add("https://localhost:5101");
+}
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Optional: HTTPS redirect (can keep, but Render already handles HTTPS)
-app.UseHttpsRedirection();
+// Only redirect to HTTPS locally; Render handles this automatically in production
+if (string.IsNullOrEmpty(renderPort))
+{
+    app.UseHttpsRedirection();
+}
 
-// ⭐ ADD ROOT ROUTE (THIS FIXES YOUR 404)
 app.MapGet("/", () => "CamuLibraryNowAPI is running 🚀");
-
-// Controllers
 app.MapControllers();
 
 app.Run();
+
